@@ -39,12 +39,17 @@ end
 def make_jobs    
     25.times do |n|
       @status = ['open', 'followup', 'in_progress', 'closed', 'archived']
-      cats = rand(50)
+      cats = 1 + rand(50)
+      acats = 1 + rand(cats)
       locations = Location.all
       location = locations[1..25]
       job = Job.create!(:number_of_cats => cats, :location => location.rand, :status => @status.rand.to_s )
-      if job.status == 'closed' or 'archived'
-        job.update_attributes(:actual_number_of_cats => 99)
+      if job.status == 'closed'
+        job.update_attributes(:actual_number_of_cats => acats)
+      elsif job.status == 'archived'
+        job.update_attributes(:actual_number_of_cats => acats)
+      else
+        job.update_attributes(:actual_number_of_cats => nil )
       end
        
     end
